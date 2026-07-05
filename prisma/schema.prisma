@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+//
+// מודל הנתונים תואם ישירות ל-mismach_techni.md §3.
+// שדות טקסונומיה (institution_type, education_stage, subject, region, scope) הם String
+// ולא Postgres enum, כדי להימנע מ-ALTER TYPE כואב אם רשימת הערכים תשתנה (ראה §8).
+// ערכי האמת היחידים לטקסונומיה חיים ב-src/lib/taxonomy.ts ונאכפים באפליקציה (Zod), לא ב-DB.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  institution
+  teacher
+  admin
+}
+
+enum JobStatus {
+  draft
+  published
+  closed
+}
+
+enum ModerationStatus {
+  pending
+  approved
+  rejected
+}
+
+enum ApplicationStatus {
+  VIEWED      @map("נצפה")
+  IN_PROGRESS @map("בתהליך")
+  REJECTED    @map("נדחה")
+  ACCEPTED    @map("התקבל")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password_hash String
+  role          Role
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  institution Institution?
+  teacher     Teacher?
+}
+
+model Institution {
+  id               String   @id @default(cuid())
+  user_id          String   @unique
+  name             String
+  institution_type String
+  region           String
+  description      String?  @db.Text
+  logo_url         String?
+  contact_name     String
+  is_verified      Boolean  @default(false)
+  // stub למונטיזציה עתידית (mismach_techni.md §7) — לא בשימוש ב-MVP
+  plan             String   @default("free")
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  user         User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  job_postings JobPosting[]
+}
+
+model Teacher {
+  id                String   @id @default(cuid())
+  user_id           String   @unique
+  full_name         String
+  subjects          String[]
+  education_stages  String[]
+  preferred_regions String[]
+  bio               String?  @db.Text
+  cv_url            String?
+  // פרטיות כברירת מחדל: פרופיל לא נחשף בחיפוש (mismach_techni.md §6)
+  is_searchable     Boolean  @default(false)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  user         User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  applications Application[]
+}
+
+model JobPosting {
+  id                String           @id @default(cuid())
+  institution_id    String
+  title             String
+  subject           String
+  education_stage   String
+  scope             String
+  region            String
+  description       String           @db.Text
+  status            JobStatus        @default(draft)
+  moderation_status ModerationStatus @default(pending)
+  // stub למונטיזציה עתידית (mismach_techni.md §7) — לא בשימוש ב-MVP
+  is_promoted       Boolean          @default(false)
+  created_at        DateTime         @default(now())
+  updated_at        DateTime         @updatedAt
+
+  institution  Institution   @relation(fields: [institution_id], references: [id], onDelete: Cascade)
+  applications Application[]
+}
+
+model Application {
+  id             String            @id @default(cuid())
+  job_posting_id String
+  teacher_id     String
+  status         ApplicationStatus @default(VIEWED)
+  message        String?           @db.Text
+  created_at     DateTime          @default(now())
+  updated_at     DateTime          @updatedAt
+
+  job_posting JobPosting @relation(fields: [job_posting_id], references: [id], onDelete: Cascade)
+  teacher     Teacher    @relation(fields: [teacher_id], references: [id], onDelete: Cascade)
+
+  @@unique([job_posting_id, teacher_id])
+}
