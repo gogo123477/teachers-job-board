@@ -26,6 +26,7 @@ export default async function InstitutionProfilePage() {
           region: institution?.region ?? "",
           contact_name: institution?.contact_name ?? "",
           description: institution?.description ?? "",
+          logo_url: institution?.logo_url ?? "",
         }}
       />
     </main>

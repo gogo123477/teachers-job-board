@@ -23,6 +23,7 @@ type InstitutionProfileFormProps = {
     region: string;
     contact_name: string;
     description: string;
+    logo_url: string;
   };
 };
 
@@ -94,6 +95,19 @@ export function InstitutionProfileForm({ defaultValues }: InstitutionProfileForm
               rows={4}
               defaultValue={defaultValues.description}
             />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="logo">לוגו (אופציונלי)</Label>
+            {defaultValues.logo_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={defaultValues.logo_url}
+                alt="לוגו נוכחי"
+                className="size-16 rounded-md border object-contain"
+              />
+            )}
+            <Input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
           </div>
 
           {state?.error && <p className="text-sm text-destructive">{state.error}</p>}

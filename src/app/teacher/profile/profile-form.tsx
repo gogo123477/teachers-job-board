@@ -17,6 +17,7 @@ type TeacherProfileFormProps = {
     education_stages: string[];
     preferred_regions: string[];
     bio: string;
+    cv_url: string;
   };
 };
 
@@ -91,6 +92,26 @@ export function TeacherProfileForm({ defaultValues }: TeacherProfileFormProps) {
           <div className="flex flex-col gap-2">
             <Label htmlFor="bio">תיאור / קורות חיים</Label>
             <Textarea id="bio" name="bio" rows={4} defaultValue={defaultValues.bio} />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="cv">קובץ קו&quot;ח (אופציונלי)</Label>
+            {defaultValues.cv_url && (
+              <a
+                href={defaultValues.cv_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-primary underline"
+              >
+                הקובץ הקיים
+              </a>
+            )}
+            <Input
+              id="cv"
+              name="cv"
+              type="file"
+              accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            />
           </div>
 
           {state?.error && <p className="text-sm text-destructive">{state.error}</p>}
