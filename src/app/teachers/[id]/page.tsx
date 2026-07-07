@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 /**
  * פרופיל מורה אינו נגיש דרך חיפוש/URL ישיר (mismach_techni.md §6).
- * כרגע (לפני שלב 4) הגישה היחידה המותרת היא המורה עצמו/ה.
- * כשתתווסף הגשת מועמדות, יתווסף כאן תנאי נוסף: מוסד עם Application מהמורה הזה.
+ * גישה מותרת: המורה עצמו/ה, או מוסד שיש לו Application מהמורה הזה
+ * למשרה שהוא בעליה (mismach_techni.md §6, backlog 4.2).
  */
 export default async function TeacherProfileViewPage({
   params,
@@ -20,7 +20,29 @@ export default async function TeacherProfileViewPage({
   }
 
   const teacher = await prisma.teacher.findUnique({ where: { id } });
-  if (!teacher || teacher.user_id !== session.user.id) {
+  if (!teacher) {
+    notFound();
+  }
+
+  const isOwner = teacher.user_id === session.user.id;
+  let isInstitutionWithApplication = false;
+
+  if (!isOwner && session.user.role === "institution") {
+    const institution = await prisma.institution.findUnique({
+      where: { user_id: session.user.id },
+    });
+    if (institution) {
+      const application = await prisma.application.findFirst({
+        where: {
+          teacher_id: teacher.id,
+          job_posting: { institution_id: institution.id },
+        },
+      });
+      isInstitutionWithApplication = !!application;
+    }
+  }
+
+  if (!isOwner && !isInstitutionWithApplication) {
     notFound();
   }
 
@@ -48,6 +70,16 @@ export default async function TeacherProfileViewPage({
               <span className="font-medium">תיאור: </span>
               {teacher.bio}
             </p>
+          )}
+          {teacher.cv_url && (
+            <a
+              href={teacher.cv_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline"
+            >
+              קובץ קו&quot;ח
+            </a>
           )}
         </CardContent>
       </Card>

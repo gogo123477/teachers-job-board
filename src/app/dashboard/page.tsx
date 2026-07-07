@@ -39,6 +39,15 @@ export default async function DashboardPage() {
             המשרות שלי
           </Button>
         )}
+        {session!.user.role === "teacher" && (
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link href="/teacher/applications" />}
+          >
+            המועמדויות שלי
+          </Button>
+        )}
       </div>
     </main>
   );

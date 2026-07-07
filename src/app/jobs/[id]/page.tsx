@@ -1,7 +1,17 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ApplySection } from "./apply-section";
+
+const APPLICATION_STATUS_LABELS = {
+  VIEWED: "נצפה",
+  IN_PROGRESS: "בתהליך",
+  REJECTED: "נדחה",
+  ACCEPTED: "התקבל",
+} as const;
 
 export default async function JobDetailPage({
   params,
@@ -9,6 +19,7 @@ export default async function JobDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const session = await auth();
 
   const job = await prisma.jobPosting.findUnique({
     where: { id },
@@ -17,6 +28,42 @@ export default async function JobDetailPage({
 
   if (!job || job.status !== "published" || job.moderation_status !== "approved") {
     notFound();
+  }
+
+  let applyArea: React.ReactNode = null;
+
+  if (!session?.user) {
+    applyArea = (
+      <Button nativeButton={false} render={<Link href={`/login?callbackUrl=/jobs/${id}`} />}>
+        התחברות להגשת מועמדות
+      </Button>
+    );
+  } else if (session.user.role === "teacher") {
+    const teacher = await prisma.teacher.findUnique({
+      where: { user_id: session.user.id },
+    });
+    if (!teacher) {
+      applyArea = (
+        <Button nativeButton={false} render={<Link href="/teacher/profile" />}>
+          יש להשלים פרופיל כדי להגיש מועמדות
+        </Button>
+      );
+    } else {
+      const existing = await prisma.application.findUnique({
+        where: {
+          job_posting_id_teacher_id: { job_posting_id: id, teacher_id: teacher.id },
+        },
+      });
+      if (existing) {
+        applyArea = (
+          <p className="text-sm text-muted-foreground">
+            כבר הגשת מועמדות · סטטוס: {APPLICATION_STATUS_LABELS[existing.status]}
+          </p>
+        );
+      } else {
+        applyArea = <ApplySection jobId={id} />;
+      }
+    }
   }
 
   return (
@@ -51,10 +98,7 @@ export default async function JobDetailPage({
             {job.description}
           </p>
 
-          {/* הגשת מועמדות בפועל תתווסף בשלב 4 */}
-          <Button disabled className="w-full">
-            הגש מועמדות (בקרוב)
-          </Button>
+          {applyArea}
         </CardContent>
       </Card>
     </main>

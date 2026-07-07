@@ -36,6 +36,7 @@ export default async function MyJobsPage() {
 
   const jobs = await prisma.jobPosting.findMany({
     where: { institution_id: institution.id },
+    include: { _count: { select: { applications: true } } },
     orderBy: { created_at: "desc" },
   });
 
@@ -68,6 +69,13 @@ export default async function MyJobsPage() {
                 {job.subject} · {job.education_stage} · {job.region}
               </p>
               <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  nativeButton={false}
+                  render={<Link href={`/institution/jobs/${job.id}/applicants`} />}
+                >
+                  מועמדים ({job._count.applications})
+                </Button>
                 <Button
                   variant="outline"
                   nativeButton={false}
