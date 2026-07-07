@@ -24,11 +24,22 @@ export default async function DashboardPage() {
       <p className="text-muted-foreground">
         מחובר/ת כ-{session!.user.email} ({ROLE_LABELS[session!.user.role]})
       </p>
-      {profilePath && (
-        <Button nativeButton={false} render={<Link href={profilePath} />}>
-          עריכת פרופיל
-        </Button>
-      )}
+      <div className="flex gap-2">
+        {profilePath && (
+          <Button nativeButton={false} render={<Link href={profilePath} />}>
+            עריכת פרופיל
+          </Button>
+        )}
+        {session!.user.role === "institution" && (
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link href="/institution/jobs" />}
+          >
+            המשרות שלי
+          </Button>
+        )}
+      </div>
     </main>
   );
 }
