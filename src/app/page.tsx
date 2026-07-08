@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GraduationCap, School, Search } from "lucide-react";
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -21,7 +22,10 @@ const FEATURES = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+  const role = session?.user.role;
+
   return (
     <main className="flex flex-1 flex-col">
       <section className="flex flex-col items-center gap-6 px-8 py-20 text-center">
@@ -32,23 +36,58 @@ export default function Home() {
           מוסדות חינוך מפרסמים משרות, מורים בונים פרופיל אחד ומוצאים את המשרה
           הבאה שלהם.
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <Button
-            size="lg"
-            nativeButton={false}
-            render={<Link href="/register?role=institution" />}
-          >
-            אני מוסד חינוכי — פרסמו משרה
+
+        {role === "institution" ? (
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Button size="lg" nativeButton={false} render={<Link href="/institution/jobs/new" />}>
+              פרסום משרה חדשה
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              nativeButton={false}
+              render={<Link href="/institution/jobs" />}
+            >
+              המשרות שלי
+            </Button>
+          </div>
+        ) : role === "teacher" ? (
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Button size="lg" nativeButton={false} render={<Link href="/jobs" />}>
+              חיפוש משרות
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              nativeButton={false}
+              render={<Link href="/teacher/applications" />}
+            >
+              המועמדויות שלי
+            </Button>
+          </div>
+        ) : role === "admin" ? (
+          <Button size="lg" nativeButton={false} render={<Link href="/admin" />}>
+            אזור ניהול
           </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            nativeButton={false}
-            render={<Link href="/jobs" />}
-          >
-            אני מורה — חפשו משרה
-          </Button>
-        </div>
+        ) : (
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Button
+              size="lg"
+              nativeButton={false}
+              render={<Link href="/register?role=institution" />}
+            >
+              אני מוסד חינוכי — פרסמו משרה
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              nativeButton={false}
+              render={<Link href="/jobs" />}
+            >
+              אני מורה — חפשו משרה
+            </Button>
+          </div>
+        )}
       </section>
 
       <section className="grid grid-cols-1 gap-4 px-8 pb-20 sm:grid-cols-3 max-w-4xl mx-auto w-full">
