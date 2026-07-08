@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { jobPostingSchema } from "@/lib/validations/job";
+import { rateLimit, RATE_LIMIT_MESSAGE } from "@/lib/rate-limit";
 
 export type JobFormState = { error?: string } | undefined;
 
@@ -26,6 +27,11 @@ export async function createJob(
   const institution = await requireInstitution();
   if (!institution) {
     return { error: "אין הרשאה לבצע פעולה זו" };
+  }
+
+  const allowed = await rateLimit("create-job", 10, 60 * 60 * 1000);
+  if (!allowed) {
+    return { error: RATE_LIMIT_MESSAGE };
   }
 
   const parsed = jobPostingSchema.safeParse({

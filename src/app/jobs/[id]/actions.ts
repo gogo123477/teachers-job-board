@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { applySchema } from "@/lib/validations/application";
+import { rateLimit, RATE_LIMIT_MESSAGE } from "@/lib/rate-limit";
 
 export type ApplyState = { error?: string; success?: boolean } | undefined;
 
@@ -22,6 +23,11 @@ export async function applyToJob(
   });
   if (!teacher) {
     return { error: "יש להשלים קודם את פרופיל המורה" };
+  }
+
+  const allowed = await rateLimit("apply-job", 20, 60 * 60 * 1000);
+  if (!allowed) {
+    return { error: RATE_LIMIT_MESSAGE };
   }
 
   const job = await prisma.jobPosting.findUnique({ where: { id: jobId } });
