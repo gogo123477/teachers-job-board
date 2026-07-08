@@ -24,7 +24,7 @@ const FEATURES = [
 
 export default async function Home() {
   const session = await auth();
-  const role = session?.user.role;
+  const role = session?.user?.role;
 
   return (
     <main className="flex flex-1 flex-col">
