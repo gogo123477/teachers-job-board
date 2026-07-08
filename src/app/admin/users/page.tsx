@@ -22,8 +22,8 @@ export default async function AdminUsersPage() {
         {users.map((user) => (
           <Card key={user.id}>
             <CardHeader>
-              <CardTitle className="flex items-center justify-between text-lg">
-                {user.email}
+              <CardTitle className="flex flex-col gap-1 text-lg sm:flex-row sm:items-center sm:justify-between">
+                <span className="break-all">{user.email}</span>
                 <span className="text-xs font-normal text-muted-foreground">
                   {ROLE_LABELS[user.role]} · {user.is_active ? "פעיל" : "חסום"}
                 </span>

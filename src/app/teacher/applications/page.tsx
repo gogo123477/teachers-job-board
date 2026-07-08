@@ -57,7 +57,7 @@ export default async function MyApplicationsPage() {
         {applications.map((application) => (
           <Card key={application.id}>
             <CardHeader>
-              <CardTitle className="flex items-center justify-between text-lg">
+              <CardTitle className="flex flex-col gap-1 text-lg sm:flex-row sm:items-center sm:justify-between">
                 <Link
                   href={`/jobs/${application.job_posting.id}`}
                   className="hover:underline"

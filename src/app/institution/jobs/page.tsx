@@ -68,18 +68,18 @@ export default async function MyJobsPage() {
         {jobs.map((job) => (
           <Card key={job.id}>
             <CardHeader>
-              <CardTitle className="flex items-center justify-between text-lg">
+              <CardTitle className="flex flex-col gap-1 text-lg sm:flex-row sm:items-center sm:justify-between">
                 {job.title}
                 <span className="text-xs font-normal text-muted-foreground">
                   {STATUS_LABELS[job.status]} · {MODERATION_LABELS[job.moderation_status]}
                 </span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex items-center justify-between">
+            <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
                 {job.subject} · {job.education_stage} · {job.region}
               </p>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Button
                   variant="outline"
                   nativeButton={false}
