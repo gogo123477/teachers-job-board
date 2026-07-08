@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { FilePlus2 } from "lucide-react";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/empty-state";
 import { closeJob } from "./actions";
 
 const STATUS_LABELS = {
@@ -50,7 +52,16 @@ export default async function MyJobsPage() {
       </div>
 
       {jobs.length === 0 && (
-        <p className="text-muted-foreground">עדיין לא פרסמת משרות.</p>
+        <EmptyState
+          icon={FilePlus2}
+          title="עדיין לא פרסמת משרות"
+          description="פרסום המשרה הראשונה לוקח פחות מדקה"
+          action={
+            <Button nativeButton={false} render={<Link href="/institution/jobs/new" />}>
+              פרסום משרה ראשונה
+            </Button>
+          }
+        />
       )}
 
       <div className="flex w-full max-w-2xl flex-col gap-4">

@@ -1,6 +1,8 @@
+import { ClipboardCheck } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/empty-state";
 import { approveJob, rejectJob } from "./actions";
 
 const STATUS_LABELS = {
@@ -25,7 +27,9 @@ export default async function AdminJobsPage() {
     <main className="flex flex-1 flex-col items-center gap-6 p-8">
       <h1 className="text-2xl font-bold">מודרציית משרות</h1>
 
-      {jobs.length === 0 && <p className="text-muted-foreground">אין משרות במערכת.</p>}
+      {jobs.length === 0 && (
+        <EmptyState icon={ClipboardCheck} title="אין משרות במערכת" />
+      )}
 
       <div className="flex w-full max-w-2xl flex-col gap-4">
         {jobs.map((job) => (

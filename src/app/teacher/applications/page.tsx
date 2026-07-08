@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Search } from "lucide-react";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/empty-state";
 
 const STATUS_LABELS = {
   VIEWED: "נצפה",
@@ -38,7 +41,16 @@ export default async function MyApplicationsPage() {
       <h1 className="text-2xl font-bold">המועמדויות שלי</h1>
 
       {applications.length === 0 && (
-        <p className="text-muted-foreground">עדיין לא הגשת מועמדות למשרה.</p>
+        <EmptyState
+          icon={Search}
+          title="עדיין לא הגשת מועמדות למשרה"
+          description="עיינו במשרות הפתוחות ומצאו את המשרה הבאה שלכם"
+          action={
+            <Button nativeButton={false} render={<Link href="/jobs" />}>
+              חיפוש משרות
+            </Button>
+          }
+        />
       )}
 
       <div className="flex w-full max-w-2xl flex-col gap-4">

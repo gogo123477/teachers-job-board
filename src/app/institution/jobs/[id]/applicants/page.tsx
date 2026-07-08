@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { Users } from "lucide-react";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/empty-state";
 import { StatusSelect } from "./status-select";
 import { updateApplicationStatus } from "./actions";
 
@@ -44,7 +46,11 @@ export default async function JobApplicantsPage({
       <h1 className="text-2xl font-bold">מועמדים · {job.title}</h1>
 
       {applications.length === 0 && (
-        <p className="text-muted-foreground">עדיין אין מועמדים למשרה זו.</p>
+        <EmptyState
+          icon={Users}
+          title="עדיין אין מועמדים למשרה זו"
+          description="ברגע שמורים יגישו מועמדות, הם יופיעו כאן"
+        />
       )}
 
       <div className="flex w-full max-w-2xl flex-col gap-4">

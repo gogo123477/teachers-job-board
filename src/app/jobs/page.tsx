@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { Briefcase, SearchX } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/empty-state";
 import {
   Select,
   SelectContent,
@@ -126,9 +128,25 @@ export default async function JobsPage({
         </div>
       </form>
 
-      {jobs.length === 0 && (
-        <p className="text-muted-foreground">לא נמצאו משרות התואמות את החיפוש.</p>
-      )}
+      {jobs.length === 0 &&
+        (q || subject || education_stage || region || scope ? (
+          <EmptyState
+            icon={SearchX}
+            title="לא נמצאו משרות התואמות את החיפוש"
+            description="נסו לשנות את מילות החיפוש או להסיר חלק מהסינונים"
+            action={
+              <Button variant="outline" nativeButton={false} render={<Link href="/jobs" />}>
+                איפוס סינון
+              </Button>
+            }
+          />
+        ) : (
+          <EmptyState
+            icon={Briefcase}
+            title="אין כרגע משרות פתוחות"
+            description="משרות חדשות מתפרסמות כאן לאחר אישור. חוזרים לבדוק בקרוב!"
+          />
+        ))}
 
       <div className="flex w-full max-w-2xl flex-col gap-4">
         {jobs.map((job) => (
