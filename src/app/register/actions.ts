@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/password";
 import { registerSchema } from "@/lib/validations/auth";
@@ -40,6 +39,5 @@ export async function registerAction(
     data: { email, password_hash, role },
   });
 
-  await signIn("credentials", { email, password, redirect: false });
-  redirect("/");
+  await signIn("credentials", { email, password, redirectTo: "/" });
 }

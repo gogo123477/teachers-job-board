@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { loginSchema } from "@/lib/validations/auth";
 import { signIn } from "@/auth";
@@ -24,14 +23,15 @@ export async function loginAction(
     await signIn("credentials", {
       email: parsed.data.email,
       password: parsed.data.password,
-      redirect: false,
+      redirectTo: "/",
     });
   } catch (error) {
     if (error instanceof AuthError) {
       return { error: "מייל או סיסמה שגויים" };
     }
+    // NEXT_REDIRECT is thrown here on success -- must propagate, not swallow
     throw error;
   }
 
-  redirect("/");
+  return undefined;
 }
