@@ -13,7 +13,7 @@ export default auth((req) => {
       loginUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(loginUrl);
     }
-    if (req.auth.user.role !== "admin") {
+    if (req.auth.user?.role !== "admin") {
       return NextResponse.redirect(new URL("/", req.url));
     }
     return NextResponse.next();
@@ -33,7 +33,7 @@ export default auth((req) => {
     pathname === "/register" ||
     pathname.startsWith("/api/");
 
-  if (req.auth && !req.auth.user.role && !exemptFromOnboarding) {
+  if (req.auth && !req.auth.user?.role && !exemptFromOnboarding) {
     return NextResponse.redirect(new URL("/onboarding", req.url));
   }
 
