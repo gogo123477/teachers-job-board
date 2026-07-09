@@ -16,3 +16,11 @@ export const loginSchema = z.object({
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;
+
+export const onboardingSchema = z.object({
+  role: z.enum(["institution", "teacher"], {
+    error: "יש לבחור סוג חשבון",
+  }),
+});
+
+export type OnboardingInput = z.infer<typeof onboardingSchema>;

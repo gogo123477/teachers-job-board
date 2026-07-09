@@ -24,10 +24,11 @@ export async function SiteHeader() {
           {session?.user ? (
             <>
               <span className="hidden text-muted-foreground sm:inline">
-                {session.user.email} · {ROLE_LABELS[session.user.role]}
+                {session.user.email}
+                {session.user.role && ` · ${ROLE_LABELS[session.user.role]}`}
               </span>
               <span className="text-xs text-muted-foreground sm:hidden">
-                {ROLE_LABELS[session.user.role]}
+                {session.user.role ? ROLE_LABELS[session.user.role] : session.user.email}
               </span>
               <form
                 action={async () => {

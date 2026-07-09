@@ -25,9 +25,21 @@ export default auth((req) => {
     return NextResponse.redirect(loginUrl);
   }
 
+  // Signed in via Google for the first time: no role assigned yet in the DB.
+  // Force onboarding before touching anything else in the app.
+  const exemptFromOnboarding =
+    pathname === "/onboarding" ||
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname.startsWith("/api/");
+
+  if (req.auth && !req.auth.user.role && !exemptFromOnboarding) {
+    return NextResponse.redirect(new URL("/onboarding", req.url));
+  }
+
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

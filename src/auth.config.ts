@@ -12,9 +12,13 @@ export const authConfig = {
   },
   providers: [],
   callbacks: {
-    jwt: ({ token, user }) => {
+    jwt: ({ token, user, trigger, session }) => {
       if (user) {
         token.role = user.role;
+      }
+      // triggered by unstable_update() after onboarding assigns a role
+      if (trigger === "update" && session?.role) {
+        token.role = session.role;
       }
       return token;
     },

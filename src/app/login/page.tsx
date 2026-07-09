@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { GoogleSignInButton } from "@/components/google-signin-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginAction } from "./actions";
@@ -43,6 +44,14 @@ export default function LoginPage() {
               {pending ? "מתחבר/ת..." : "התחברות"}
             </Button>
           </form>
+
+          <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="h-px flex-1 bg-border" />
+            או
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
+          <GoogleSignInButton />
         </CardContent>
       </Card>
     </main>

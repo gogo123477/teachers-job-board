@@ -4,6 +4,7 @@ import { Suspense, useActionState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { GoogleSignInButton } from "@/components/google-signin-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -58,6 +59,14 @@ function RegisterForm() {
             {pending ? "נרשם/ת..." : "הרשמה"}
           </Button>
         </form>
+
+        <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="h-px flex-1 bg-border" />
+          או
+          <div className="h-px flex-1 bg-border" />
+        </div>
+
+        <GoogleSignInButton />
       </CardContent>
     </Card>
   );

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 
@@ -16,13 +17,16 @@ const PROFILE_PATH = {
 
 export default async function DashboardPage() {
   const session = await auth();
-  const profilePath = PROFILE_PATH[session!.user.role];
+  if (!session?.user?.role) {
+    redirect("/onboarding");
+  }
+  const profilePath = PROFILE_PATH[session.user.role];
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
       <h1 className="text-2xl font-bold">אזור אישי</h1>
       <p className="text-muted-foreground">
-        מחובר/ת כ-{session!.user.email} ({ROLE_LABELS[session!.user.role]})
+        מחובר/ת כ-{session.user.email} ({ROLE_LABELS[session.user.role]})
       </p>
       <div className="flex gap-2">
         {profilePath && (
@@ -30,7 +34,7 @@ export default async function DashboardPage() {
             עריכת פרופיל
           </Button>
         )}
-        {session!.user.role === "institution" && (
+        {session.user.role === "institution" && (
           <Button
             variant="outline"
             nativeButton={false}
@@ -39,7 +43,7 @@ export default async function DashboardPage() {
             המשרות שלי
           </Button>
         )}
-        {session!.user.role === "teacher" && (
+        {session.user.role === "teacher" && (
           <Button
             variant="outline"
             nativeButton={false}

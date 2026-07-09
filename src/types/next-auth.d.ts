@@ -3,18 +3,20 @@ import type { Role } from "@/generated/prisma/client";
 
 declare module "next-auth" {
   interface User {
-    role: Role;
+    role?: Role;
   }
   interface Session {
     user: {
       id: string;
-      role: Role;
+      // undefined means the user authenticated (e.g. via Google) but hasn't
+      // completed onboarding yet -- proxy.ts redirects them to /onboarding.
+      role?: Role;
     } & DefaultSession["user"];
   }
 }
 
 declare module "@auth/core/jwt" {
   interface JWT {
-    role: Role;
+    role?: Role;
   }
 }
