@@ -41,7 +41,7 @@ export default async function EditJobPage({
           subject: job.subject,
           education_stage: job.education_stage,
           scope: job.scope,
-          region: job.region,
+          city: job.city,
           description: job.description,
         }}
       />

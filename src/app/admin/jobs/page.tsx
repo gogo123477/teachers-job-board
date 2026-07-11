@@ -44,7 +44,7 @@ export default async function AdminJobsPage() {
             </CardHeader>
             <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
-                {job.institution.name} · {job.subject} · {job.education_stage} · {job.region}
+                {job.institution.name} · {job.subject} · {job.education_stage} · {job.city}
               </p>
               <div className="flex flex-wrap gap-2">
                 {job.moderation_status === "pending" && (

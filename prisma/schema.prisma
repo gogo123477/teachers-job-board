@@ -58,7 +58,7 @@ model Institution {
   user_id          String   @unique
   name             String
   institution_type String
-  region           String
+  city             String
   description      String?  @db.Text
   logo_url         String?
   contact_name     String
@@ -75,10 +75,10 @@ model Institution {
 model Teacher {
   id                String   @id @default(cuid())
   user_id           String   @unique
-  full_name         String
-  subjects          String[]
-  education_stages  String[]
-  preferred_regions String[]
+  full_name        String
+  subjects         String[]
+  education_stages String[]
+  preferred_cities String[]
   bio               String?  @db.Text
   cv_url            String?
   // פרטיות כברירת מחדל: פרופיל לא נחשף בחיפוש (mismach_techni.md §6)
@@ -97,7 +97,7 @@ model JobPosting {
   subject           String
   education_stage   String
   scope             String
-  region            String
+  city              String
   description       String           @db.Text
   status            JobStatus        @default(draft)
   moderation_status ModerationStatus @default(pending)

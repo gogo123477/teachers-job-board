@@ -22,7 +22,7 @@ export async function saveInstitutionProfile(
   const parsed = institutionProfileSchema.safeParse({
     name: formData.get("name"),
     institution_type: formData.get("institution_type"),
-    region: formData.get("region"),
+    city: formData.get("city"),
     contact_name: formData.get("contact_name"),
     description: formData.get("description") || undefined,
   });

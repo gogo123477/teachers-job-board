@@ -13,14 +13,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { INSTITUTION_TYPES, REGIONS } from "@/lib/taxonomy";
+import { INSTITUTION_TYPES } from "@/lib/taxonomy";
+import { CityCombobox } from "@/components/city-combobox";
 import { saveInstitutionProfile } from "./actions";
 
 type InstitutionProfileFormProps = {
   defaultValues: {
     name: string;
     institution_type: string;
-    region: string;
+    city: string;
     contact_name: string;
     description: string;
     logo_url: string;
@@ -62,19 +63,13 @@ export function InstitutionProfileForm({ defaultValues }: InstitutionProfileForm
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="region">אזור</Label>
-            <Select name="region" defaultValue={defaultValues.region || undefined}>
-              <SelectTrigger id="region" className="w-full">
-                <SelectValue placeholder="בחר/י אזור" />
-              </SelectTrigger>
-              <SelectContent>
-                {REGIONS.map((region) => (
-                  <SelectItem key={region} value={region}>
-                    {region}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label htmlFor="city">יישוב</Label>
+            <CityCombobox
+              id="city"
+              name="city"
+              required
+              defaultValue={defaultValues.city || undefined}
+            />
           </div>
 
           <div className="flex flex-col gap-2">

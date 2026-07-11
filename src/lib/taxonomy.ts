@@ -44,18 +44,6 @@ export const SUBJECTS = [
 ] as const;
 export type Subject = (typeof SUBJECTS)[number];
 
-export const REGIONS = [
-  "צפון",
-  "חיפה והקריות",
-  "מרכז",
-  "תל אביב והמרכז",
-  "ירושלים",
-  "שפלה",
-  "דרום",
-  "יהודה ושומרון",
-] as const;
-export type Region = (typeof REGIONS)[number];
-
 export const JOB_SCOPES = [
   "משרה מלאה",
   "משרה חלקית",

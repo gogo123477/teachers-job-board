@@ -77,7 +77,7 @@ export default async function MyJobsPage() {
             </CardHeader>
             <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
-                {job.subject} · {job.education_stage} · {job.region}
+                {job.subject} · {job.education_stage} · {job.city}
               </p>
               <div className="flex flex-wrap gap-2">
                 <Button

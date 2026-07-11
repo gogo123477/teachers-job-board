@@ -23,7 +23,7 @@ export default async function JobDetailPage({
 
   const job = await prisma.jobPosting.findUnique({
     where: { id },
-    include: { institution: { select: { name: true, region: true } } },
+    include: { institution: { select: { name: true, city: true } } },
   });
 
   if (!job || job.status !== "published" || job.moderation_status !== "approved") {
@@ -86,8 +86,8 @@ export default async function JobDetailPage({
             {job.education_stage}
           </p>
           <p>
-            <span className="font-medium">אזור: </span>
-            {job.region}
+            <span className="font-medium">יישוב: </span>
+            {job.city}
           </p>
           <p>
             <span className="font-medium">היקף משרה: </span>

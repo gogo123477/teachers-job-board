@@ -62,8 +62,8 @@ export default async function TeacherProfileViewPage({
             {teacher.education_stages.join(", ")}
           </p>
           <p>
-            <span className="font-medium">אזורים מועדפים: </span>
-            {teacher.preferred_regions.join(", ")}
+            <span className="font-medium">יישובים מועדפים: </span>
+            {teacher.preferred_cities.join(", ")}
           </p>
           {teacher.bio && (
             <p>

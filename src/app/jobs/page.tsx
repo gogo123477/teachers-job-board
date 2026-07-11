@@ -12,14 +12,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { EDUCATION_STAGES, JOB_SCOPES, REGIONS, SUBJECTS } from "@/lib/taxonomy";
+import { EDUCATION_STAGES, JOB_SCOPES, SUBJECTS } from "@/lib/taxonomy";
+import { CITIES } from "@/lib/cities";
+import { CityCombobox } from "@/components/city-combobox";
 import type { Prisma } from "@/generated/prisma/client";
 
 type SearchParams = {
   q?: string;
   subject?: string;
   education_stage?: string;
-  region?: string;
+  city?: string;
   scope?: string;
 };
 
@@ -36,7 +38,7 @@ export default async function JobsPage({
   const q = params.q?.trim();
   const subject = isTaxonomyValue(params.subject, SUBJECTS);
   const education_stage = isTaxonomyValue(params.education_stage, EDUCATION_STAGES);
-  const region = isTaxonomyValue(params.region, REGIONS);
+  const city = isTaxonomyValue(params.city, CITIES);
   const scope = isTaxonomyValue(params.scope, JOB_SCOPES);
 
   const where: Prisma.JobPostingWhereInput = {
@@ -44,7 +46,7 @@ export default async function JobsPage({
     moderation_status: "approved",
     ...(subject && { subject }),
     ...(education_stage && { education_stage }),
-    ...(region && { region }),
+    ...(city && { city }),
     ...(scope && { scope }),
     ...(q && {
       OR: [
@@ -93,18 +95,12 @@ export default async function JobsPage({
             </SelectContent>
           </Select>
 
-          <Select name="region" defaultValue={region}>
-            <SelectTrigger className="w-fit">
-              <SelectValue placeholder="אזור" />
-            </SelectTrigger>
-            <SelectContent>
-              {REGIONS.map((r) => (
-                <SelectItem key={r} value={r}>
-                  {r}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <CityCombobox
+            name="city"
+            defaultValue={city}
+            placeholder="יישוב"
+            className="w-40"
+          />
 
           <Select name="scope" defaultValue={scope}>
             <SelectTrigger className="w-fit">
@@ -120,7 +116,7 @@ export default async function JobsPage({
           </Select>
 
           <Button type="submit">סינון</Button>
-          {(q || subject || education_stage || region || scope) && (
+          {(q || subject || education_stage || city || scope) && (
             <Button variant="ghost" nativeButton={false} render={<Link href="/jobs" />}>
               איפוס
             </Button>
@@ -129,7 +125,7 @@ export default async function JobsPage({
       </form>
 
       {jobs.length === 0 &&
-        (q || subject || education_stage || region || scope ? (
+        (q || subject || education_stage || city || scope ? (
           <EmptyState
             icon={SearchX}
             title="לא נמצאו משרות התואמות את החיפוש"
@@ -159,7 +155,7 @@ export default async function JobsPage({
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
-              {job.institution.name} · {job.subject} · {job.education_stage} · {job.region} ·{" "}
+              {job.institution.name} · {job.subject} · {job.education_stage} · {job.city} ·{" "}
               {job.scope}
             </CardContent>
           </Card>

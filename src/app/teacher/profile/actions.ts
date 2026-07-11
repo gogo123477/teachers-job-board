@@ -27,7 +27,7 @@ export async function saveTeacherProfile(
     full_name: formData.get("full_name"),
     subjects: formData.getAll("subjects"),
     education_stages: formData.getAll("education_stages"),
-    preferred_regions: formData.getAll("preferred_regions"),
+    preferred_cities: formData.getAll("preferred_cities"),
     bio: formData.get("bio") || undefined,
   });
 

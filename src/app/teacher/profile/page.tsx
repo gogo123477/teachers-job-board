@@ -24,7 +24,7 @@ export default async function TeacherProfilePage() {
           full_name: teacher?.full_name ?? "",
           subjects: teacher?.subjects ?? [],
           education_stages: teacher?.education_stages ?? [],
-          preferred_regions: teacher?.preferred_regions ?? [],
+          preferred_cities: teacher?.preferred_cities ?? [],
           bio: teacher?.bio ?? "",
           cv_url: teacher?.cv_url ?? "",
         }}

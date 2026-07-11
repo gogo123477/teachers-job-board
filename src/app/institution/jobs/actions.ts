@@ -39,7 +39,7 @@ export async function createJob(
     subject: formData.get("subject"),
     education_stage: formData.get("education_stage"),
     scope: formData.get("scope"),
-    region: formData.get("region"),
+    city: formData.get("city"),
     description: formData.get("description"),
   });
 
@@ -79,7 +79,7 @@ export async function updateJob(
     subject: formData.get("subject"),
     education_stage: formData.get("education_stage"),
     scope: formData.get("scope"),
-    region: formData.get("region"),
+    city: formData.get("city"),
     description: formData.get("description"),
   });
 

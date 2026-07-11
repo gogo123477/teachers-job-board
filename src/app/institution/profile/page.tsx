@@ -23,7 +23,7 @@ export default async function InstitutionProfilePage() {
         defaultValues={{
           name: institution?.name ?? "",
           institution_type: institution?.institution_type ?? "",
-          region: institution?.region ?? "",
+          city: institution?.city ?? "",
           contact_name: institution?.contact_name ?? "",
           description: institution?.description ?? "",
           logo_url: institution?.logo_url ?? "",

@@ -7,7 +7,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { EDUCATION_STAGES, REGIONS, SUBJECTS } from "@/lib/taxonomy";
+import { EDUCATION_STAGES, SUBJECTS } from "@/lib/taxonomy";
+import { CityMultiCombobox } from "@/components/city-combobox";
 import { saveTeacherProfile } from "./actions";
 
 type TeacherProfileFormProps = {
@@ -15,7 +16,7 @@ type TeacherProfileFormProps = {
     full_name: string;
     subjects: string[];
     education_stages: string[];
-    preferred_regions: string[];
+    preferred_cities: string[];
     bio: string;
     cv_url: string;
   };
@@ -81,11 +82,10 @@ export function TeacherProfileForm({ defaultValues }: TeacherProfileFormProps) {
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label>אזורים מועדפים</Label>
-            <CheckboxGroup
-              name="preferred_regions"
-              options={REGIONS}
-              defaultValues={defaultValues.preferred_regions}
+            <Label>יישובים מועדפים</Label>
+            <CityMultiCombobox
+              name="preferred_cities"
+              defaultValues={defaultValues.preferred_cities}
             />
           </div>
 
