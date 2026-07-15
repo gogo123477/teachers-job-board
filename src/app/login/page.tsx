@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { GoogleSignInButton } from "@/components/google-signin-button";
@@ -41,6 +42,7 @@ export default function LoginPage() {
             )}
 
             <Button type="submit" disabled={pending} className="w-full">
+              {pending && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
               {pending ? "מתחבר/ת..." : "התחברות"}
             </Button>
           </form>

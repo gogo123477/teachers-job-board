@@ -2,6 +2,7 @@
 
 import { Suspense, useActionState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { GoogleSignInButton } from "@/components/google-signin-button";
@@ -56,6 +57,7 @@ function RegisterForm() {
           {state?.error && <p className="text-sm text-destructive">{state.error}</p>}
 
           <Button type="submit" disabled={pending} className="w-full">
+            {pending && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
             {pending ? "נרשם/ת..." : "הרשמה"}
           </Button>
         </form>
