@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getPostingOrgName } from "@/lib/job-display";
 import { ApplySection } from "./apply-section";
 
 const APPLICATION_STATUS_LABELS = {
@@ -32,7 +33,16 @@ export default async function JobDetailPage({
 
   let applyArea: React.ReactNode = null;
 
-  if (!session?.user) {
+  if (job.imported) {
+    applyArea = (
+      <Button
+        nativeButton={false}
+        render={<a href={job.source_url ?? undefined} target="_blank" rel="noopener noreferrer" />}
+      >
+        מעבר למשרה באתר המקור
+      </Button>
+    );
+  } else if (!session?.user) {
     applyArea = (
       <Button nativeButton={false} render={<Link href={`/login?callbackUrl=/jobs/${id}`} />}>
         התחברות להגשת מועמדות
@@ -75,7 +85,7 @@ export default async function JobDetailPage({
         <CardContent className="flex flex-col gap-3 text-sm">
           <p>
             <span className="font-medium">מוסד: </span>
-            {job.institution.name}
+            {getPostingOrgName(job)}
           </p>
           <p>
             <span className="font-medium">תחום הוראה: </span>

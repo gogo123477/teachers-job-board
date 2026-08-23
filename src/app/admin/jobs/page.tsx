@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/empty-state";
+import { getPostingOrgName } from "@/lib/job-display";
 import { approveJob, rejectJob } from "./actions";
 
 const STATUS_LABELS = {
@@ -44,7 +45,21 @@ export default async function AdminJobsPage() {
             </CardHeader>
             <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
-                {job.institution.name} · {job.subject} · {job.education_stage} · {job.city}
+                {job.imported && (
+                  <>
+                    <span className="rounded bg-muted px-1.5 py-0.5 text-xs">מיובא</span>{" "}
+                    <a
+                      href={job.source_url ?? undefined}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline"
+                    >
+                      מקור
+                    </a>{" "}
+                    ·{" "}
+                  </>
+                )}
+                {getPostingOrgName(job)} · {job.subject} · {job.education_stage} · {job.city}
               </p>
               <div className="flex flex-wrap gap-2">
                 {job.moderation_status === "pending" && (

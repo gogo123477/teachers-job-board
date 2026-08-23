@@ -91,23 +91,32 @@ model Teacher {
 }
 
 model JobPosting {
-  id                String           @id @default(cuid())
-  institution_id    String
-  title             String
-  subject           String
-  education_stage   String
-  scope             String
-  city              String
-  description       String           @db.Text
-  status            JobStatus        @default(draft)
-  moderation_status ModerationStatus @default(pending)
+  id                 String           @id @default(cuid())
+  institution_id     String?
+  title              String
+  subject            String
+  education_stage    String
+  scope              String
+  city               String
+  description        String           @db.Text
+  status             JobStatus        @default(draft)
+  moderation_status  ModerationStatus @default(pending)
   // stub למונטיזציה עתידית (mismach_techni.md §7) — לא בשימוש ב-MVP
-  is_promoted       Boolean          @default(false)
-  created_at        DateTime         @default(now())
-  updated_at        DateTime         @updatedAt
+  is_promoted        Boolean          @default(false)
+  // ייבוא אוטומטי ממקורות חיצוניים (סקרייפר) — institution_id ריק עבור משרות מיובאות
+  imported           Boolean          @default(false)
+  source_name        String?
+  source_url         String?
+  source_external_id String?
+  content_hash       String?
+  created_at         DateTime         @default(now())
+  updated_at         DateTime         @updatedAt
 
-  institution  Institution   @relation(fields: [institution_id], references: [id], onDelete: Cascade)
+  institution  Institution?  @relation(fields: [institution_id], references: [id], onDelete: Cascade)
   applications Application[]
+
+  @@unique([source_name, source_external_id])
+  @@unique([content_hash])
 }
 
 model Application {

@@ -15,6 +15,7 @@ import {
 import { EDUCATION_STAGES, JOB_SCOPES, SUBJECTS } from "@/lib/taxonomy";
 import { CITIES } from "@/lib/cities";
 import { CityCombobox } from "@/components/city-combobox";
+import { getPostingOrgName } from "@/lib/job-display";
 import type { Prisma } from "@/generated/prisma/client";
 
 type SearchParams = {
@@ -148,14 +149,19 @@ export default async function JobsPage({
         {jobs.map((job) => (
           <Card key={job.id}>
             <CardHeader>
-              <CardTitle className="text-lg">
+              <CardTitle className="flex items-center gap-2 text-lg">
                 <Link href={`/jobs/${job.id}`} className="hover:underline">
                   {job.title}
                 </Link>
+                {job.imported && (
+                  <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-normal text-muted-foreground">
+                    מיובא
+                  </span>
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
-              {job.institution.name} · {job.subject} · {job.education_stage} · {job.city} ·{" "}
+              {getPostingOrgName(job)} · {job.subject} · {job.education_stage} · {job.city} ·{" "}
               {job.scope}
             </CardContent>
           </Card>

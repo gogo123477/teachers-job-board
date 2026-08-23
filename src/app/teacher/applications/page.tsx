@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/empty-state";
+import { getPostingOrgName } from "@/lib/job-display";
 
 const STATUS_LABELS = {
   VIEWED: "נצפה",
@@ -70,7 +71,7 @@ export default async function MyApplicationsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
-              {application.job_posting.institution.name}
+              {getPostingOrgName(application.job_posting)}
             </CardContent>
           </Card>
         ))}

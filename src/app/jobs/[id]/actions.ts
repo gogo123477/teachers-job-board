@@ -31,7 +31,12 @@ export async function applyToJob(
   }
 
   const job = await prisma.jobPosting.findUnique({ where: { id: jobId } });
-  if (!job || job.status !== "published" || job.moderation_status !== "approved") {
+  if (
+    !job ||
+    job.status !== "published" ||
+    job.moderation_status !== "approved" ||
+    job.imported
+  ) {
     return { error: "המשרה אינה זמינה להגשת מועמדות" };
   }
 
